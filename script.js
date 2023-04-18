@@ -1,69 +1,3 @@
-// // Define variables
-// const container = document.querySelector(".container");
-// const colorPicker = document.querySelector("#color-picker");
-// const newGridButton = document.querySelector("#new-grid-btn");
-
-// let numSquaresPerSide = 16;
-
-// // Create initial grid
-// createGrid(numSquaresPerSide);
-
-// // Add event listeners to each grid square
-// addEventListenersToSquares();
-
-// // Set CSS properties to turn squares into grid
-// container.style.display = "grid";
-// container.style.gridTemplateColumns = `repeat(${numSquaresPerSide}, 1fr)`;
-// container.style.gridTemplateRows = `repeat(${numSquaresPerSide}, 1fr)`;
-// container.style.height = "400px";
-// container.style.width = "400px";
-
-// // Add event listener to new grid button
-// newGridButton.addEventListener("click", () => {
-//   // Ask user for number of squares per side
-//   const userInput = prompt(
-//     "Enter number of squares per side (maximum 100):",
-//     numSquaresPerSide
-//   );
-//   // Check if user input is valid
-//   const newNumSquaresPerSide = parseInt(userInput);
-//   if (!isNaN(newNumSquaresPerSide) && newNumSquaresPerSide <= 100) {
-//     numSquaresPerSide = newNumSquaresPerSide;
-//     // Remove existing grid
-//     container.innerHTML = "";
-//     // Create new grid
-//     createGrid(numSquaresPerSide);
-//     // Set CSS properties to turn squares into grid
-//     container.style.gridTemplateColumns = `repeat(${numSquaresPerSide}, 1fr)`;
-//     container.style.gridTemplateRows = `repeat(${numSquaresPerSide}, 1fr)`;
-//     // Add event listeners to new squares
-//     addEventListenersToSquares();
-//   }
-// });
-
-// // Create grid
-// function createGrid(num) {
-//   // Create new squares
-//   for (let i = 0; i < num * num; i++) {
-//     const div = document.createElement("div");
-//     div.classList.add("square");
-//     container.appendChild(div);
-//   }
-// }
-
-// // Add event listeners to each grid square
-// function addEventListenersToSquares() {
-//   const squares = document.querySelectorAll(".square");
-//   squares.forEach((square) => {
-//     square.dataset.color = "white";
-//     square.addEventListener("mouseover", () => {
-//       const trailColor = colorPicker.value;
-//       square.style.backgroundColor = trailColor;
-//       square.dataset.color = trailColor;
-//     });
-//   });
-// }
-
 // Define variables
 const container = document.querySelector(".container");
 const colorPicker = document.querySelector("#color-picker");
@@ -118,6 +52,10 @@ function createGrid(num) {
   }
 }
 let isRainbowModeOn = false;
+let isShadingModeOn = false;
+let isLightenModeOn = false;
+let shadeAmount = 1; // adjust this value to change the amount of shading or lightening
+
 //DRAW FUNCTION
 // Add event listeners to each grid square
 function addEventListenersToSquares() {
@@ -178,7 +116,7 @@ function addEventListenersToSquares() {
 }
 
 //GRID BUTTON
-let isGridVisible = true;
+let isGridVisible = false;
 const gridButton = document.querySelector("#gridmode");
 
 gridButton.addEventListener("click", toggleGrid);
@@ -215,3 +153,35 @@ function getRandomColor() {
   }
   return color;
 }
+
+// Add event listener to shading mode button
+const shadingModeButton = document.querySelector("#shadingmode");
+shadingModeButton.addEventListener("click", () => {
+  isShadingModeOn = !isShadingModeOn; // toggle shading mode
+  if (isShadingModeOn) {
+    shadingModeButton.innerHTML = "Shading Mode <b>ON</b>";
+    isLightenModeOn = false; // turn off lighten mode
+    lightenModeButton.innerHTML = "Lighten Mode OFF";
+
+    const currentColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--main-color");
+    const newColor = adjust(RGBToHex, currentColor, -20); // darken color by 20 units
+    document.documentElement.style.setProperty("--main-color", newColor);
+  } else {
+    shadingModeButton.textContent = "Shading Mode OFF";
+  }
+});
+
+// Add event listener to lighten mode button
+const lightenModeButton = document.querySelector("#lightenmode");
+lightenModeButton.addEventListener("click", () => {
+  isLightenModeOn = !isLightenModeOn; // toggle lighten mode
+  if (isLightenModeOn) {
+    lightenModeButton.innerHTML = "Lighten Mode <b>ON</b>";
+    isShadingModeOn = false; // turn off shading mode
+    shadingModeButton.innerHTML = "Shading Mode OFF";
+  } else {
+    lightenModeButton.textContent = "Lighten Mode OFF";
+  }
+});
