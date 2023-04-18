@@ -244,3 +244,15 @@ function rgbToHex(rgb) {
 
 const eyedropperButton = document.querySelector("#eyedropper");
 eyedropperButton.addEventListener("click", eyedropper);
+
+const clearButton = document.querySelector("#clearbtn");
+clearButton.addEventListener("click", () => {
+  container.innerHTML = "";
+  // Create new grid
+  createGrid(numSquaresPerSide);
+  // Set CSS properties to turn squares into grid
+  container.style.gridTemplateColumns = `repeat(${numSquaresPerSide}, 1fr)`;
+  container.style.gridTemplateRows = `repeat(${numSquaresPerSide}, 1fr)`;
+  // Add event listeners to new squares
+  addEventListenersToSquares();
+});
