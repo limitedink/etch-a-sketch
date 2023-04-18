@@ -1,0 +1,27 @@
+.square:hover {
+  background-color: var(--trail-color);
+}
+.square {
+  background-color: white;
+  border: 0.1px solid black;
+  user-select: none; /* prevent selection on click */
+}
+
+.container {
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0.1px solid black;
+}
+
+.trail {
+  background-color: var(--trail-color);
+}
+
+.hover {
+  background-color: var(--trail-color);
+  opacity: 1;
+  border: none;
+}
