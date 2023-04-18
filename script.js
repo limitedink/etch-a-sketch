@@ -3,7 +3,7 @@ const container = document.querySelector(".container");
 const colorPicker = document.querySelector("#color-picker");
 const newGridButton = document.querySelector("#new-grid-btn");
 
-let numSquaresPerSide = 64;
+let numSquaresPerSide = 16;
 let draw = false; // Flag to determine if mouse is being held down
 
 // Create initial grid
@@ -23,12 +23,12 @@ container.style.width = "500px";
 newGridButton.addEventListener("click", () => {
   // Ask user for number of squares per side
   const userInput = prompt(
-    "Enter number of squares per side (maximum 100):",
+    "Enter number of squares per side (maximum 64):",
     numSquaresPerSide
   );
   // Check if user input is valid
   const newNumSquaresPerSide = parseInt(userInput);
-  if (!isNaN(newNumSquaresPerSide) && newNumSquaresPerSide <= 100) {
+  if (!isNaN(newNumSquaresPerSide) && newNumSquaresPerSide <= 64) {
     numSquaresPerSide = newNumSquaresPerSide;
     // Remove existing grid
     container.innerHTML = "";
@@ -54,8 +54,7 @@ function createGrid(num) {
 let isRainbowModeOn = false;
 let isShadingModeOn = false;
 let isLightenModeOn = false;
-let shadeAmount = 1; // adjust this value to change the amount of shading or lightening
-
+let shadingCounter = 0;
 //DRAW FUNCTION
 // Add event listeners to each grid square
 function addEventListenersToSquares() {
@@ -90,8 +89,43 @@ function addEventListenersToSquares() {
           } else {
             trailColor = colorPicker.value;
           }
-          square.style.backgroundColor = trailColor;
-          square.dataset.color = trailColor;
+
+          if (isShadingModeOn) {
+            let currentColor = square.dataset.color;
+            if (currentColor === "white") {
+              square.style.backgroundColor = "#222";
+              square.dataset.color = "#222";
+            } else {
+              let rgbColor = hexToRGB(currentColor);
+              let newRgbColor = {
+                r: rgbColor.r - 25,
+                g: rgbColor.g - 25,
+                b: rgbColor.b - 25,
+              };
+              let newHexColor = RGBToHex(newRgbColor);
+              square.style.backgroundColor = newHexColor;
+              square.dataset.color = newHexColor;
+            }
+          } else if (isLightenModeOn) {
+            let currentColor = square.dataset.color;
+            if (currentColor === "white") {
+              square.style.backgroundColor = "#ddd";
+              square.dataset.color = "#ddd";
+            } else {
+              let rgbColor = hexToRGB(currentColor);
+              let newRgbColor = {
+                r: rgbColor.r + 25,
+                g: rgbColor.g + 25,
+                b: rgbColor.b + 25,
+              };
+              let newHexColor = RGBToHex(newRgbColor);
+              square.style.backgroundColor = newHexColor;
+              square.dataset.color = newHexColor;
+            }
+          } else {
+            square.style.backgroundColor = trailColor;
+            square.dataset.color = trailColor;
+          }
         }
       }
     });
@@ -153,7 +187,7 @@ function getRandomColor() {
   }
   return color;
 }
-
+//Shading MODE
 // Add event listener to shading mode button
 const shadingModeButton = document.querySelector("#shadingmode");
 shadingModeButton.addEventListener("click", () => {
@@ -172,7 +206,7 @@ shadingModeButton.addEventListener("click", () => {
     shadingModeButton.textContent = "Shading Mode OFF";
   }
 });
-
+//Lighten MODE
 // Add event listener to lighten mode button
 const lightenModeButton = document.querySelector("#lightenmode");
 lightenModeButton.addEventListener("click", () => {
