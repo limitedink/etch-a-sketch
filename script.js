@@ -185,3 +185,28 @@ lightenModeButton.addEventListener("click", () => {
     lightenModeButton.textContent = "Lighten Mode OFF";
   }
 });
+
+function eyedropper() {
+  const squares = document.querySelectorAll(".square");
+  const colorPicker = document.querySelector("#color-picker");
+
+  squares.forEach((square) => {
+    square.addEventListener("click", () => {
+      const color = square.style.backgroundColor;
+      const hexColor = rgbToHex(color);
+      colorPicker.value = hexColor;
+    });
+  });
+}
+
+function rgbToHex(rgb) {
+  const rgbArr = rgb.match(/\d+/g);
+  const hexArr = rgbArr.map((color) => {
+    const hex = Number(color).toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  });
+  return "#" + hexArr.join("");
+}
+
+const eyedropperButton = document.querySelector("#eyedropper");
+eyedropperButton.addEventListener("click", eyedropper);
